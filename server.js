@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const healthInsuranceRoutes = require('./routes/healthInsuranceRoutes');
+const path = require('path');
+require('dotenv').config();
 
 const app = express();
 const PORT = 4000;
@@ -9,17 +12,22 @@ const PORT = 4000;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
 
 // MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/vault', {
+
+mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 }).then(() => {
   console.log('✅ Connected to MongoDB (vault)');
 }).catch((err) => {
   console.error('❌ MongoDB connection error:', err);
 });
 
+app.use('/api/health-insurance-leads', healthInsuranceRoutes);
 
 // Contact Schema
 const contactSchema = new mongoose.Schema({
@@ -33,29 +41,27 @@ const contactSchema = new mongoose.Schema({
 
 const ContactSubmission = mongoose.model('ContactSubmission', contactSchema);
 
-
-// Health Insurance Lead Schema
-const healthInsuranceLeadSchema = new mongoose.Schema({
-  policy_type:   { type: String, enum: ['new', 'renew'], required: true },
-  adults:        { type: Number, default: 0 },
-  children:      { type: Number, default: 0 },
-  existing_disease: { type: String },  // e.g., 'none', 'diabetes'
-  insurer:       { type: String },
-  claim_status:  { type: String, enum: ['yes', 'no'], default: null },
-  tenure:        { type: Number },     // in years
-  eldest_age:    { type: Number },
-  pincode:       { type: String, maxlength: 10 },
-  created_at:    { type: Date, default: Date.now }
+// Life Insurance Lead Schema
+const lifeInsuranceLeadSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  dob: { type: String }, 
+  gender: { type: String, enum: ['male', 'female', 'other'], required: true },
+  email: { type: String, required: true },
+  phone: { type: String, required: true , maxlength: 14 },
+  selected_plan: { type: String, required: true }, 
+  preferred_companies: [{ type: String }], 
+  created_at: { type: Date, default: Date.now }
 });
 
-const HealthInsuranceLead = mongoose.model('HealthInsuranceLead', healthInsuranceLeadSchema);
+const LifeInsuranceLead = mongoose.model('LifeInsuranceLead', lifeInsuranceLeadSchema);
+
 
 // Business Insurance Lead Schema
 
 const businessQuoteSchema = new mongoose.Schema({
   name: { type: String, required: true },
   business_name: { type: String },
-  mobile_number: { type: String, required: true },
+  mobile_number: { type: String, required: true, maxlength: 14 },
   product_type: { type: String, enum: ['retail', 'service', 'manufacturing'], required: true },
   email: { type: String },
   created_at: { type: Date, default: Date.now }
@@ -87,27 +93,25 @@ app.get('/api/contact', async (req, res) => {
   }
 });
 
-
-
-// 🚀 POST: Save Health Insurance Lead
-app.post('/api/health-insurance-leads', async (req, res) => {
+// 📥 POST: Life insaurance Create Lead
+app.post('/api/life-insurance-leads', async (req, res) => {
   try {
-    const lead = new HealthInsuranceLead(req.body);
-    const saved = await lead.save();
-    res.status(201).json({ success: true, id: saved._id });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to save insurance lead' });
+    const lifeLead = new LifeInsuranceLead(req.body);
+    const saved = await lifeLead.save();
+    res.status(201).json({success:true, id: saved.id});
+  } catch (error) {
+    console.error('Error saving lead:', error);
+    res.status(500).json({ success: false, message: 'Failed to save life insaurance lead' });
   }
 });
 
-// 📥 GET: Fetch Health Insurance Leads
-app.get('/api/health-insurance-leads', async (req, res) => {
+// 📤 GET: Life Insaurance Fetch All Leads (optional)
+app.get('/api/life-insurance-leads', async (req, res) => {
   try {
-    const leads = await HealthInsuranceLead.find().sort({ created_at: -1 });
+    const leads = await LifeInsuranceLead.find().sort({ created_at: -1 });
     res.json(leads);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to retrieve insurance leads' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve leads' });
   }
 });
 
