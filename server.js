@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const healthInsuranceRoutes = require('./routes/healthInsuranceRoutes');
+const vehicleRoutes = require("./routes/vehicleRoutes")
 const path = require('path');
 require('dotenv').config();
 
@@ -28,6 +29,7 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 app.use('/api/health-insurance-leads', healthInsuranceRoutes);
+app.use("/api/vehicles", vehicleRoutes);
 
 // Contact Schema
 const contactSchema = new mongoose.Schema({

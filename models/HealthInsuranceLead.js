@@ -6,7 +6,7 @@ const healthInsuranceLeadSchema = new mongoose.Schema({
   children: { type: Number, default: 0 },
   existing_disease: { type: String },
   insurer: { type: String },
-  preferred_insurer: { type: String },
+  preferred_insurer: [{ type: String }],
   current_insurer: { type: String },
   claim_status: { type: String, enum: ['yes', 'no'], default: null },
   tenure: { type: Number },
