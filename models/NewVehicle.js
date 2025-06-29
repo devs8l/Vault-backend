@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 
 const newVehicleSchema = new mongoose.Schema({
     fullName: String,
@@ -16,3 +16,25 @@ const newVehicleSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = mongoose.model('NewVehicle', newVehicleSchema);
+
+export default newVehicleSchema;*/
+
+import mongoose from 'mongoose';
+
+const newVehicleSchema = new mongoose.Schema({
+  fullName: String,
+  mobileNumber: String,
+  emailId: String,
+  pinCode: String,
+  vehicleCategory: String,
+  vehicleBrand: String,
+  vehicleModel: String,
+  fuelType: String,
+  registrationYear: String,
+  coverageType: String,
+  preferredCompanies: [String],
+  selectedAddOns: [String],
+}, { timestamps: true });
+
+const NewVehicle = mongoose.model('NewVehicle', newVehicleSchema);
+export default NewVehicle;
