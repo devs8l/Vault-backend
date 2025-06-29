@@ -179,6 +179,26 @@ app.get('/api/life-insurance-leads', async (req, res) => {
   }
 });
 
+// Business Quote APIs
+app.post('/api/business-quotes', async (req, res) => {
+  try {
+    const quote = new BusinessQuote(req.body);
+    const saved = await quote.save();
+    res.status(201).json({ success: true, id: saved._id });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save business quote' });
+  }
+});
+
+app.get('/api/business-quotes', async (req, res) => {
+  try {
+    const quotes = await BusinessQuote.find().sort({ created_at: -1 });
+    res.json(quotes);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to retrieve business quotes' });
+  }
+});
+
 app.get('/', (req, res) => {
   res.send('Vault Insurance API is running 🚀');
 });

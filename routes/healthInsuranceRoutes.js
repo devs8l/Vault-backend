@@ -13,7 +13,8 @@ router.post('/', upload.single('policy_file'), async (req, res) => {
       policy_type: req.body.policy_type || 'new',
     };
 
-    if (req.file && req.file.buffer) {
+    // Only upload file if it's a 'renew' policy
+    if (req.body.policy_type !== 'new' && req.file?.buffer) {
       const result = await uploadToCloudinary(req.file.buffer, 'vault_insurance');
       leadData.policy_file = result.secure_url;
     }
