@@ -1,4 +1,4 @@
-const cloudinary = require('cloudinary').v2;
+/*const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 cloudinary.config({
@@ -18,4 +18,36 @@ const storage = new CloudinaryStorage({
 
 
 
-module.exports = { cloudinary, storage };
+module.exports = { cloudinary, storage };*/
+
+import { v2 as cloudinary } from 'cloudinary';
+
+const connectCloudinary = () => {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+};
+
+export const uploadToCloudinary = async (buffer, folder = 'vault_insurance') => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        resource_type: 'auto', // automatically handles image/pdf
+        folder,
+        allowed_formats: ['jpg', 'jpeg', 'png', 'pdf'],
+        transformation: [{ width: 800, height: 800, crop: 'limit' }],
+      },
+      (error, result) => {
+        if (result) resolve(result);
+        else reject(error);
+      }
+    );
+
+    uploadStream.end(buffer);
+  });
+};
+
+export default connectCloudinary;
+
