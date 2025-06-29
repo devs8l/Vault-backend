@@ -1,27 +1,28 @@
-import express from 'express';
-import upload from '../middlewares/upload.js';
-import {
+const express = require('express');
+const multer = require('multer');
+const { storage } = require('../utils/cloudinary');
+const {
   createNewVehicle,
   getAllNewVehicles,
   createOldVehicle,
-  getAllOldVehicles,
-} from '../controllers/vehicleController.js';
+  getAllOldVehicles
+} = require('../controllers/vehicleController');
 
 const router = express.Router();
 
-// New Vehicle
+const upload = multer({ storage });
+
 router.post('/new', createNewVehicle);
 router.get('/new', getAllNewVehicles);
 
-// Old Vehicle with file upload
 router.post(
   '/old',
-  upload.fields([
+    upload.fields([
     { name: 'rcFile', maxCount: 1 },
-    { name: 'policyFile', maxCount: 1 },
+    { name: 'policyFile', maxCount: 1 }
   ]),
   createOldVehicle
 );
 router.get('/old', getAllOldVehicles);
 
-export default router;
+module.exports = router;

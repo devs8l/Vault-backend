@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const healthInsuranceLeadSchema = new mongoose.Schema({
   policy_type: { type: String, enum: ['new', 'renew'], required: true },
@@ -15,10 +15,8 @@ const healthInsuranceLeadSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String },
   phone: { type: String, required: true, maxlength: 14 },
-  policy_file: { type: String },
+  policy_file: { type: String }, // Store file path or URL
   created_at: { type: Date, default: Date.now }
 });
 
-const HealthInsuranceLead = mongoose.model('HealthInsuranceLead', healthInsuranceLeadSchema);
-
-export default HealthInsuranceLead;
+module.exports = mongoose.model('HealthInsuranceLead', healthInsuranceLeadSchema);

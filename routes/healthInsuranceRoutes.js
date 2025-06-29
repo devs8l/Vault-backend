@@ -1,9 +1,10 @@
-import express from 'express';
-import HealthInsuranceLead from '../models/HealthInsuranceLead.js';
-import upload from '../middlewares/upload.js';
-import { uploadToCloudinary } from '../utils/cloudinary.js';
-
+const express = require('express');
 const router = express.Router();
+const HealthInsuranceLead = require('../models/HealthInsuranceLead');
+const multer = require('multer');
+const { storage } = require('../utils/cloudinary');
+
+const upload = multer({ storage });
 
 // POST: Create Health Insurance Lead
 router.post('/', upload.single('policy_file'), async (req, res) => {
@@ -13,23 +14,16 @@ router.post('/', upload.single('policy_file'), async (req, res) => {
       policy_type: req.body.policy_type || 'new',
     };
 
-    // Only upload file if it's a 'renew' policy
-    if (req.body.policy_type !== 'new' && req.file?.buffer) {
-      const result = await uploadToCloudinary(req.file.buffer, 'vault_insurance');
-      leadData.policy_file = result.secure_url;
+    if (req.file) {
+      leadData.policy_file = req.file.path;
     }
 
     const lead = new HealthInsuranceLead(leadData);
     const saved = await lead.save();
 
-    res.status(201).json({
-      success: true,
-      id: saved._id,
-      policy_type: saved.policy_type,
-      policy_file_url: saved.policy_file,
-    });
+    res.status(201).json({ success: true, id: saved._id, policy_type: saved.policy_type });
   } catch (err) {
-    console.error('Upload Error:', err);
+    console.error(err);
     res.status(500).json({ error: 'Failed to save insurance lead', details: err.message });
   }
 });
@@ -44,5 +38,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-export default router;
-
+module.exports = router;
