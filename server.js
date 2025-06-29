@@ -102,8 +102,8 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));*/
 
-
 import express from 'express';
+import serverless from 'serverless-http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
@@ -119,27 +119,26 @@ import BusinessQuote from './models/BusinessQuote.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 4000;
-
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
-  console.log('✅ Connected to MongoDB');
-}).catch((err) => {
-  console.error('❌ MongoDB connection error:', err);
-});
+// MongoDB connection (prevent multiple connections in Lambda)
+let conn = null;
+const connectDB = async () => {
+  if (conn) return;
+  conn = await mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  console.log('✅ MongoDB connected');
+};
+connectDB();
 
 // Routes
 app.use('/api/health-insurance-leads', healthInsuranceRoutes);
 app.use('/api/vehicles', vehicleRoutes);
 
-// Contact APIs
+// Direct inline routes
 app.post('/api/contact', async (req, res) => {
   try {
     const contact = new ContactSubmission(req.body);
@@ -159,7 +158,6 @@ app.get('/api/contact', async (req, res) => {
   }
 });
 
-// Life Insurance APIs
 app.post('/api/life-insurance-leads', async (req, res) => {
   try {
     const lead = new LifeInsuranceLead(req.body);
@@ -179,7 +177,6 @@ app.get('/api/life-insurance-leads', async (req, res) => {
   }
 });
 
-// Business Quote APIs
 app.post('/api/business-quotes', async (req, res) => {
   try {
     const quote = new BusinessQuote(req.body);
@@ -199,8 +196,8 @@ app.get('/api/business-quotes', async (req, res) => {
   }
 });
 
-app.get('/', (req, res) => {
-  res.send('Vault Insurance API is running 🚀');
+app.get('/api', (req, res) => {
+  res.send('Vault Insurance API (Vercel serverless) is running 🚀');
 });
 
-app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
+export default serverless(app);
