@@ -17,7 +17,7 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => console.error('❌ MongoDB error:', err));
 
 // Mount new combined router
-const mainRouter = require('../routes/index');
+const mainRouter = require('./routes/index');
 app.use('/api', mainRouter);
 
 // Test route
