@@ -2,16 +2,11 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.js",
+      "src": "server.js",
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
-          "dist/**",
-          "routes/**",
-          "models/**",
-          "controllers/**",
-          "utils/**",
-          ".env"
+          "dist/**"
         ]
       }
     }
@@ -19,7 +14,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "api/index.js",
+      "dest": "server.js",
       "headers": {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
