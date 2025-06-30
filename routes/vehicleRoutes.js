@@ -1,15 +1,14 @@
-const express = require('express');
-const multer = require('multer');
-const { storage } = require('../utils/cloudinary');
-const {
+import express from 'express';
+import multer from 'multer';
+import { storage } from '../utils/cloudinary.js';
+import {
   createNewVehicle,
   getAllNewVehicles,
   createOldVehicle,
   getAllOldVehicles
-} = require('../controllers/vehicleController');
+} from '../controllers/vehicleController.js';
 
 const router = express.Router();
-
 const upload = multer({ storage });
 
 router.post('/new', createNewVehicle);
@@ -17,7 +16,7 @@ router.get('/new', getAllNewVehicles);
 
 router.post(
   '/old',
-    upload.fields([
+  upload.fields([
     { name: 'rcFile', maxCount: 1 },
     { name: 'policyFile', maxCount: 1 }
   ]),
@@ -25,4 +24,4 @@ router.post(
 );
 router.get('/old', getAllOldVehicles);
 
-module.exports = router;
+export default router;

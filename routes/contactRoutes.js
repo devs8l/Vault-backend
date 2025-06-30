@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import ContactSubmission from '../models/Contact.js';
+
 const router = express.Router();
-const ContactSubmission = require('../models/Contact');
 
 // POST /api/contact - Save contact form data
 router.post('/', async (req, res) => {
@@ -23,4 +24,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

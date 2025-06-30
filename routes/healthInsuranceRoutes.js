@@ -1,9 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const HealthInsuranceLead = require('../models/HealthInsuranceLead');
-const multer = require('multer');
-const { storage } = require('../utils/cloudinary');
+import express from 'express';
+import multer from 'multer';
+import HealthInsuranceLead from '../models/HealthInsuranceLead.js';
+import { storage } from '../utils/cloudinary.js';
 
+const router = express.Router();
 const upload = multer({ storage });
 
 // POST: Create Health Insurance Lead
@@ -38,4 +38,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

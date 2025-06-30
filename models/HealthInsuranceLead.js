@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const healthInsuranceLeadSchema = new mongoose.Schema({
   policy_type: { type: String, enum: ['new', 'renew'], required: true },
@@ -19,4 +19,4 @@ const healthInsuranceLeadSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('HealthInsuranceLead', healthInsuranceLeadSchema);
+export default mongoose.model('HealthInsuranceLead', healthInsuranceLeadSchema);

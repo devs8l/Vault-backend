@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const oldVehicleSchema = new mongoose.Schema({
     fullName: String,
@@ -18,4 +18,4 @@ const oldVehicleSchema = new mongoose.Schema({
     selectedAddOns: [String],
 }, { timestamps: true });
 
-module.exports = mongoose.model('OldVehicle', oldVehicleSchema);
+export default mongoose.model('OldVehicle', oldVehicleSchema);

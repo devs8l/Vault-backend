@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import LifeInsuranceLead from '../models/LifeInsuranceLead.js';
+
 const router = express.Router();
-const LifeInsuranceLead = require('../models/LifeInsuranceLead');
 
 // POST /api/life-insurance-leads - Save a lead
 router.post('/', async (req, res) => {
@@ -23,4 +24,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

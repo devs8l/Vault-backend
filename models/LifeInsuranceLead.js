@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const lifeInsuranceLeadSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -11,4 +11,5 @@ const lifeInsuranceLeadSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('LifeInsuranceLead', lifeInsuranceLeadSchema);
+
+export default mongoose.model('LifeInsuranceLead', lifeInsuranceLeadSchema);

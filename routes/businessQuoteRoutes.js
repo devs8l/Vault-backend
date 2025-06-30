@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import BusinessQuote from '../models/BusinessQuote.js';
+
 const router = express.Router();
-const BusinessQuote = require('../models/BusinessQuote');
 
 // POST /api/business-quotes - Save a new business quote
 router.post('/', async (req, res) => {
@@ -23,4 +24,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

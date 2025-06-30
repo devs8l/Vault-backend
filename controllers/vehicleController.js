@@ -1,8 +1,8 @@
-const NewVehicle = require('../models/NewVehicle');
-const OldVehicle = require('../models/OldVehicle');
+import NewVehicle from '../models/NewVehicle.js';
+import OldVehicle from '../models/OldVehicle.js';
 
 // Create New Vehicle
-exports.createNewVehicle = async (req, res) => {
+export const createNewVehicle = async (req, res) => {
   try {
     const vehicle = new NewVehicle(req.body);
     await vehicle.save();
@@ -13,13 +13,17 @@ exports.createNewVehicle = async (req, res) => {
 };
 
 // Get All New Vehicles
-exports.getAllNewVehicles = async (req, res) => {
-  const vehicles = await NewVehicle.find();
-  res.json(vehicles);
+export const getAllNewVehicles = async (req, res) => {
+  try {
+    const vehicles = await NewVehicle.find();
+    res.json(vehicles);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 // Create Old Vehicle with Cloudinary uploads
-exports.createOldVehicle = async (req, res) => {
+export const createOldVehicle = async (req, res) => {
   try {
     const rcFileUrl = req.files?.rcFile?.[0]?.path || '';
     const policyFileUrl = req.files?.policyFile?.[0]?.path || '';
@@ -39,7 +43,11 @@ exports.createOldVehicle = async (req, res) => {
 };
 
 // Get All Old Vehicles
-exports.getAllOldVehicles = async (req, res) => {
-  const vehicles = await OldVehicle.find();
-  res.json(vehicles);
+export const getAllOldVehicles = async (req, res) => {
+  try {
+    const vehicles = await OldVehicle.find();
+    res.json(vehicles);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
