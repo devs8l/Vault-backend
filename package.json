@@ -20,8 +20,10 @@
     "mongoose": "^8.16.1",
     "multer": "^2.0.1",
     "multer-storage-cloudinary": "^4.0.0",
-    "node": "^22.16.0",
     "serverless-http": "^3.2.0",
     "sqlite3": "^5.1.7"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
