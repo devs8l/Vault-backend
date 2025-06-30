@@ -5,10 +5,18 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
 
+/* Models
+const ContactSubmission = require('./models/Contact');
+const LifeInsuranceLead = require('./models/LifeInsuranceLead');
+const BusinessQuote = require('./models/BusinessQuote');*/
+
 dotenv.config();
 
 const healthInsuranceRoutes = require('./routes/healthInsuranceRoutes');
 const vehicleRoutes = require('./routes/vehicleRoutes');
+const contactRoutes = require('./routes/contactRoutes');
+const lifeInsuranceRoutes = require('./routes/lifeInsuranceRoutes');
+const businessQuoteRoutes = require('./routes/businessQuoteRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -29,14 +37,12 @@ mongoose.connect(process.env.MONGO_URI,
 // Routes
 app.use('/api/health-insurance-leads', healthInsuranceRoutes);
 app.use('/api/vehicles', vehicleRoutes);
-
-// Models
-const ContactSubmission = require('./models/Contact');
-const LifeInsuranceLead = require('./models/LifeInsuranceLead');
-const BusinessQuote = require('./models/BusinessQuote');
+app.use('/api/contact', contactRoutes);
+app.use('/api/life-insurance-leads', lifeInsuranceRoutes);
+app.use('/api/business-quotes', businessQuoteRoutes);
 
 // Contact APIs
-app.post('/api/contact', async (req, res) => {
+/*app.post('/api/contact', async (req, res) => {
   try {
     const contact = new ContactSubmission(req.body);
     const saved = await contact.save();
@@ -93,7 +99,7 @@ app.get('/api/business-quotes', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Failed to retrieve business quotes' });
   }
-});
+});*/
 
 app.get('/', (req, res) => {
   res.send('Vault Insurance API is running 🚀');
