@@ -21,9 +21,9 @@ const mainRouter = require('./routes/index.js');
 app.use('/api', mainRouter);
 
 // Test route
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
   res.send('Vault API is running 🚀');
-});
+});*/
 
 module.exports = serverless(app); // for Vercel
 
