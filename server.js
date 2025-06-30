@@ -101,8 +101,8 @@ app.get('/api/business-quotes', async (req, res) => {
   }
 });*/
 
-/*app.get('/', (req, res) => {
+app.get('/', (req, res) => {
   res.send('Vault Insurance API is running 🚀');
-});*/
+});
 
 app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
