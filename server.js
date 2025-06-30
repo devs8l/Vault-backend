@@ -1,4 +1,56 @@
 const express = require('express');
+const serverless = require('serverless-http');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+
+// Connect MongoDB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch((err) => console.error('❌ MongoDB error:', err));
+
+// Mount new combined router
+const mainRouter = require('../routes/index');
+app.use('/api', mainRouter);
+
+// Test route
+app.get('/', (req, res) => {
+  res.send('Vault API is running 🚀');
+});
+
+module.exports = serverless(app); // for Vercel
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -99,4 +151,6 @@ app.get('/', (req, res) => {
   res.send('Vault Insurance API is running 🚀');
 });
 
-app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));*/
+
+
