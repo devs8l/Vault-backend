@@ -123,12 +123,12 @@ mongoose.connect(process.env.MONGO_URI, {
   .catch(err => console.error('❌ MongoDB error:', err));
 
 // Routes
-const healthInsuranceRoutes = require('./routes/healthInsuranceRoutes');
-const vehicleRoutes = require('./routes/vehicleRoutes');
+const healthInsuranceRoutes = require('../routes/healthInsuranceRoutes');
+const vehicleRoutes = require('../routes/vehicleRoutes');
 
-const ContactSubmission = require('./models/Contact');
-const LifeInsuranceLead = require('./models/LifeInsuranceLead');
-const BusinessQuote = require('./models/BusinessQuote');
+const ContactSubmission = require('../models/Contact');
+const LifeInsuranceLead = require('../models/LifeInsuranceLead');
+const BusinessQuote = require('../models/BusinessQuote');
 
 app.use('/api/health-insurance-leads', healthInsuranceRoutes);
 app.use('/api/vehicles', vehicleRoutes);
